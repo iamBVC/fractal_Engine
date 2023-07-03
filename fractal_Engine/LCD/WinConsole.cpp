@@ -53,6 +53,7 @@ namespace WinConsole
 	void Init(lcd_t* lcd)
 	{
 		HWND myconsole = GetConsoleWindow();
+		MoveWindow(myconsole, 0, 0, lcd->params.width, lcd->params.height, TRUE);
 		lcd->HandlerPtr = GetDC(myconsole);
 		lcd->ops.WRITE_fn = Write;
 		lcd->ops.CLEAR_fn = Clear;

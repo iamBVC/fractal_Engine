@@ -19,6 +19,7 @@
 namespace LCD {
 
 	bool init(lcd_t* lcd) {
+		if (lcd->buffer) free(lcd->buffer);
 		lcd->buffer = (uint32_t*)malloc(lcd->params.width * lcd->params.height * sizeof(uint32_t));
 		if (lcd->buffer)
 			return true;
@@ -189,19 +190,20 @@ namespace LCD {
 		}
 	}
 
-	void draw_text(lcd_t* lcd, int32_t x, int32_t y, const GFXfont font, char* text, uint32_t color) {
-		for (uint16_t i = 0; i < strlen(text); i++) {
+	void draw_text(lcd_t* lcd, int32_t x, int32_t y, const GFXfont font, const char* text, uint32_t color) {
+		for (int32_t i = 0; i < strlen(text); i++) {
 
-			text[i] -= font.first;
-			GFXglyph* glyph = &(font.glyph[(unsigned char)text[i]]);
+			char textRef = text[i];
+			textRef -= font.first;
+			GFXglyph* glyph = &(font.glyph[(unsigned char)textRef]);
 			uint8_t* bitmap = font.bitmap;
 
-			uint16_t bo = glyph->bitmapOffset;
-			uint8_t  w = glyph->width,
+			int32_t bo = glyph->bitmapOffset;
+			int32_t  w = glyph->width,
 				h = glyph->height;
-			int8_t   xo = glyph->xOffset,
+			int32_t   xo = glyph->xOffset,
 				yo = glyph->yOffset;
-			uint8_t  xx, yy, bits = 0, bit = 0;
+			int32_t  xx, yy, bits = 0, bit = 0;
 
 			for (yy = h; yy > 0; yy--) {
 				for (xx = 0; xx < w; xx++) {

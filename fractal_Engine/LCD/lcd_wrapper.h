@@ -31,7 +31,7 @@ namespace LCD {
 	void draw_triangle(lcd_t* lcd, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint32_t color);
 	void fill_circle(lcd_t* lcd, int32_t x, int32_t y, uint32_t radius, uint32_t color);
 	void fill_triangle(lcd_t* lcd, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint32_t color);
-	void draw_text(lcd_t* lcd, int32_t x, int32_t y, const GFXfont font, char* text, uint32_t color);
+	void draw_text(lcd_t* lcd, int32_t x, int32_t y, const GFXfont font, const char* text, uint32_t color);
 	void draw_image(lcd_t* lcd, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t* data);
 
 
