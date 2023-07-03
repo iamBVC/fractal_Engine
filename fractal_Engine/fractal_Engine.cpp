@@ -13,19 +13,15 @@ int main()
 {
 	//init output device
 	lcd_t console = {};
-	console.params.height = 9 * 60;
-	console.params.width = 16 * 60;
+	console.params.height = 9 * 90;
+	console.params.width = 16 * 90;
 	WinConsole::Init(&console);
 	LCD::init(&console);
 
-
-	double xCenter = -0.5;
-	double yCenter = 0;
-
-	double zoom = 1.0;
+	mandelbrot_params_t params = { 256, -0.5, 0, 1};
 
 	uint32_t oldtime = GetTickCount();
-	uint64_t IterationMax = 100;
+
 
 	printf("\
 arrows = move\n\
@@ -42,47 +38,47 @@ N = decrease quality\n\
 		bool inputPressed = false;
 		if (GetKeyState(VK_ADD) & 0x8000)
 		{
-			zoom *= 0.9;
+			params.zoom *= 0.9;
 			inputPressed = true;
 		}
 		if (GetKeyState(VK_SUBTRACT) & 0x8000)
 		{
-			zoom /= 0.9;
+			params.zoom /= 0.9;
 			inputPressed = true;
 		}
 		if (GetKeyState(VK_UP) & 0x8000)
 		{
-			yCenter += zoom / 20;
+			params.yCenter += params.zoom / 20;
 			inputPressed = true;
 		}
 		if (GetKeyState(VK_DOWN) & 0x8000)
 		{
-			yCenter -= zoom / 20;
+			params.yCenter -= params.zoom / 20;
 			inputPressed = true;
 		}
 		if (GetKeyState(VK_RIGHT) & 0x8000)
 		{
-			xCenter += zoom / 20;
+			params.xCenter += params.zoom / 20;
 			inputPressed = true;
 		}
 		if (GetKeyState(VK_LEFT) & 0x8000)
 		{
-			xCenter -= zoom / 20;
+			params.xCenter -= params.zoom / 20;
 			inputPressed = true;
 		}
 
 
 		
-		Mandelbrot::multithreadEvaluate(IterationMax, xCenter, yCenter, zoom, 0, 0, console.params.width, console.params.height, console.params.width, console.params.height, console.buffer);
+		Mandelbrot::multithreadEvaluate(&params, 0, 0, console.params.width, console.params.height, console.params.width, console.params.height, console.buffer);
 
 		uint32_t time = GetTickCount();
 		uint32_t diff = time - oldtime;
 		if (diff < MIN_DRAW_TIME) Sleep(MIN_DRAW_TIME - diff);
 
 		char buff[128];
-		sprintf_s(buff, "X: %.10f   Y: %.10f   Z: %.10f", xCenter, yCenter, zoom);
+		sprintf_s(buff, "X: %.10f   Y: %.10f   Z: %.10f", params.xCenter, params.yCenter, params.zoom);
 		LCD::draw_text(&console, 20, 20, mono18x7, buff, WHITE);
-		sprintf_s(buff, "I: %llu   T: %u ms", IterationMax, diff);
+		sprintf_s(buff, "I: %llu   T: %u ms", params.iterations, diff);
 		LCD::draw_text(&console, 20, 50, mono18x7, buff, WHITE);
 
 		LCD::print(&console);
@@ -91,30 +87,30 @@ N = decrease quality\n\
 
 		if (GetKeyState('H') & 0x8000)
 		{
-			IterationMax *= 1.1;
+			params.iterations *= 1.2;
 			continue;
 		}
 
 		if (GetKeyState('N') & 0x8000)
 		{
-			IterationMax *= 0.9;
+			params.iterations *= 0.8;
 			continue;
 		}
 
 
 
-		if (GetKeyState('D'))
+		if (!GetKeyState('D'))
 		{
 			continue;
 		}
 
 		if (!inputPressed) {
 			if ((diff < MAX_DRAW_TIME / 0.9) && (diff > MAX_DRAW_TIME * 0.9)) continue;
-			IterationMax /= (4.0 / 5.0) + (diff / (MAX_DRAW_TIME * 5.0));
+			params.iterations /= (3.0 / 4.0) + (diff / (MAX_DRAW_TIME * 4.0));
 		}
 		else {
 			if ((diff < MIN_DRAW_TIME / 0.9) && (diff > MIN_DRAW_TIME * 0.9)) continue;
-			IterationMax /= (4.0 / 5.0) + (diff / (MIN_DRAW_TIME * 5.0));
+			params.iterations /= (3.0 / 4.0) + (diff / (MIN_DRAW_TIME * 4.0));
 		}
 
 
