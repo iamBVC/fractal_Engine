@@ -143,7 +143,18 @@
     <ClInclude Include="LCD\lcd_common.h" />
     <ClInclude Include="LCD\lcd_wrapper.h" />
     <ClInclude Include="MANDELBROT\mandelbrot.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="UTILS\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="fractal_Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\icon.png" />
+    <Image Include="C:\Users\Brian\Desktop\224058-200.png" />
+    <Image Include="C:\Users\Brian\Desktop\fractal-icon-20.jpg" />
+    <Image Include="C:\Users\Brian\Desktop\IDI_ICON1.png" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

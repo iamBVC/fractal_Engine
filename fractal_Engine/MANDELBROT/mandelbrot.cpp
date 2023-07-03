@@ -61,8 +61,10 @@ namespace Mandelbrot
 	{
 		vector<thread> threads;
 
-		const auto numThreads = std::thread::hardware_concurrency();
-		int32_t deltax = (x2 - x1) / numThreads;
+		//const auto numThreads = std::thread::hardware_concurrency() * 128;
+		const auto numThreads = (x2 - x1);
+		//uint32_t deltax = (x2 - x1) / numThreads;
+		uint32_t deltax = 1;
 
 		for (uint32_t i = 0; i < numThreads; i++)
 		{

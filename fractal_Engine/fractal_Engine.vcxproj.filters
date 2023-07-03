@@ -53,5 +53,30 @@
     <ClInclude Include="MANDELBROT\mandelbrot.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="fractal_Engine.rc">
+      <Filter>File di risorse</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="C:\Users\Brian\Desktop\fractal-icon-20.jpg">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="C:\Users\Brian\Desktop\224058-200.png">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="C:\Users\Brian\Desktop\IDI_ICON1.png">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\icon.png">
+      <Filter>File di risorse</Filter>
+    </Image>
   </ItemGroup>
 </Project>

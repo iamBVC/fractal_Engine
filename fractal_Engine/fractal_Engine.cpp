@@ -25,7 +25,7 @@ int main()
 
 	printf("\
 arrows = move\n\
-+- = change zoom\n\
+numpad +- = change zoom\n\
 D = toggle dynamic resolution\n\
 H = increase quality\n\
 N = decrease quality\n\
