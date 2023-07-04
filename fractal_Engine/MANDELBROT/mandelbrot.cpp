@@ -44,8 +44,8 @@ namespace Mandelbrot
 					Iteration++;
 				};
 
-				float hue = 360.0f * (double)Iteration / (double)params->iterations;
-				float brightness = (Iteration < params->iterations) ? (100.0f * (double)Iteration / (double)params->iterations) : 0.0f;
+				float hue = 360.0f * (float)Iteration / (float)params->iterations;
+				float brightness = (Iteration < params->iterations) ? (100.0f * (float)Iteration / (float)params->iterations) : 0.0f;
 				float saturation = (Iteration < params->iterations) ? 100.0f : 0.0f;
 
 				auto color = Utils::HSVtoRGB(hue, saturation, brightness);
@@ -61,15 +61,10 @@ namespace Mandelbrot
 	{
 		vector<thread> threads;
 
-		//const auto numThreads = std::thread::hardware_concurrency() * 128;
-		const auto numThreads = (x2 - x1);
-		//uint32_t deltax = (x2 - x1) / numThreads;
-		uint32_t deltax = 1;
-
-		for (uint32_t i = 0; i < numThreads; i++)
+		for (uint32_t i = 0; i < (x2 - x1); i++)
 		{
-			int32_t newx1 = x1 + (deltax * i);
-			int32_t newx2 = newx1 + deltax;
+			int32_t newx1 = x1 + i;
+			int32_t newx2 = newx1 + 1;
 			threads.push_back(thread(Evaluate, params, newx1, y1, newx2, y2, bufferWidth, bufferHeight, buffer));
 		}
 

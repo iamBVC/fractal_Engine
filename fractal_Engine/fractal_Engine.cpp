@@ -18,7 +18,7 @@ int main()
 	WinConsole::Init(&console);
 	LCD::init(&console);
 
-	mandelbrot_params_t params = { 256, -0.5, 0, 1};
+	mandelbrot_params_t params = { 256, -0.5, 0, 1 };
 
 	uint32_t oldtime = GetTickCount();
 
@@ -29,10 +29,36 @@ numpad +- = change zoom\n\
 D = toggle dynamic resolution\n\
 H = increase quality\n\
 N = decrease quality\n\
+R = reset view\n\
 \n\nPress enter to start...");
 	getchar();
 
 	while (1) {
+
+		if (params.iterations < 10) params.iterations = 10;
+
+		RECT rect;
+		if (GetWindowRect(GetConsoleWindow(), &rect))
+		{
+			int width = rect.right - rect.left;
+			int height = rect.bottom - rect.top;
+			if (width != console.params.width || height != console.params.height) {
+				console.params.width = width;
+				console.params.height = height;
+				LCD::init(&console);
+				LCD::clear(&console);
+				continue;
+			}
+		}
+
+
+		if (GetKeyState('R') & 0x8000)
+		{
+			params.xCenter = -0.5;
+			params.yCenter = 0;
+			params.iterations = 256;
+			params.zoom = 1;
+		}
 
 
 		bool inputPressed = false;
@@ -68,7 +94,7 @@ N = decrease quality\n\
 		}
 
 
-		
+
 		Mandelbrot::multithreadEvaluate(&params, 0, 0, console.params.width, console.params.height, console.params.width, console.params.height, console.buffer);
 
 		uint32_t time = GetTickCount();
@@ -88,30 +114,24 @@ N = decrease quality\n\
 		if (GetKeyState('H') & 0x8000)
 		{
 			params.iterations *= 1.2;
-			continue;
 		}
-
-		if (GetKeyState('N') & 0x8000)
+		else if (GetKeyState('N') & 0x8000)
 		{
 			params.iterations *= 0.8;
-			continue;
 		}
-
-
-
-		if (!GetKeyState('D'))
+		else if (GetKeyState('D'))
 		{
-			continue;
+			if (!inputPressed) {
+				if ((diff < MAX_DRAW_TIME / 0.9) && (diff > MAX_DRAW_TIME * 0.9)) continue;
+				params.iterations /= (3.0 / 4.0) + (diff / (MAX_DRAW_TIME * 4.0));
+			}
+			else {
+				if ((diff < MIN_DRAW_TIME / 0.9) && (diff > MIN_DRAW_TIME * 0.9)) continue;
+				params.iterations /= (3.0 / 4.0) + (diff / (MIN_DRAW_TIME * 4.0));
+			}
 		}
 
-		if (!inputPressed) {
-			if ((diff < MAX_DRAW_TIME / 0.9) && (diff > MAX_DRAW_TIME * 0.9)) continue;
-			params.iterations /= (3.0 / 4.0) + (diff / (MAX_DRAW_TIME * 4.0));
-		}
-		else {
-			if ((diff < MIN_DRAW_TIME / 0.9) && (diff > MIN_DRAW_TIME * 0.9)) continue;
-			params.iterations /= (3.0 / 4.0) + (diff / (MIN_DRAW_TIME * 4.0));
-		}
+
 
 
 
